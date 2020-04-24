@@ -11,12 +11,27 @@
 
 <ul>
   {#each tasks as task, index}
-    <li>{task.description}</li>
+    <li>
+      <input class="description" type="text" bind:value="{task.description}" />
+      <input
+        class="pomodoros"
+        type="number"
+        bind:value="{task.expectedPomodoros}"
+      />
+    </li>
   {/each}
 </ul>
 
 <style>
   ul {
     list-style: none;
+  }
+
+  .description {
+    min-width: 400px;
+  }
+
+  .pomodoros {
+    max-width: 100px;
   }
 </style>
