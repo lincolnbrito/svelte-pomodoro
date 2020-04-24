@@ -1,14 +1,11 @@
 <script>
+  import TaskList from './TaskList.svelte';
   let title = 'Pomodoro Svelte';
 </script>
 
 <main>
   <h1>{title}!</h1>
-  <p>
-    Visit the
-    <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-    to learn how to build Svelte apps.
-  </p>
+  <TaskList />
 </main>
 
 <style>
