@@ -6,6 +6,6 @@
   "svelteStrictMode": true,
   "svelteBracketNewLine": true,
   "svelteAllowShorthand": false,
-  "svelteSortOrder": "styles-scripts-markup",
-  "trailingComma": "all"
+  "svelteSortOrder": "scripts-markup-styles",
+  "trailingComma": "es5"
 }

@@ -1,20 +1,7 @@
-<style>
-  ul {
-    list-style: none;
-  }
-
-  .description {
-    min-width: 400px;
-  }
-
-  .pomodoros {
-    max-width: 100px;
-  }
-</style>
-
 <script>
   import { afterUpdate } from 'svelte';
   import { Task } from './Task.js';
+  import Message from './Message.svelte';
 
   let taskAddedPendingFocus = false;
   let lastInput;
@@ -27,7 +14,7 @@
 
   $: allExpectedPomodoros = tasks.reduce(
     (acc, t) => acc + t.expectedPomodoros,
-    0,
+    0
   );
 
   function handleAddTask() {
@@ -86,3 +73,21 @@
 {#if tasks.length != 0}
   <p>Today you'll complete {allExpectedPomodoros} pomodoros</p>
 {/if}
+
+<style>
+  ul {
+    list-style: none;
+  }
+
+  .description {
+    min-width: 400px;
+  }
+
+  .pomodoros {
+    max-width: 100px;
+  }
+
+  .compo {
+    margin: 50px;
+  }
+</style>
