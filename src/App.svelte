@@ -1,9 +1,9 @@
 <script>
-  export let name;
+  let title = 'Pomodoro Svelte';
 </script>
 
 <main>
-  <h1>Hello {name}!</h1>
+  <h1>{title}!</h1>
   <p>
     Visit the
     <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
