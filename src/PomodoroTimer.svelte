@@ -1,4 +1,6 @@
 <script>
+  export let activeTask
+
   const minutesToSeconds = minutes => minutes * 60
   const secondsToMinutes = seconds => Math.floor(seconds / 60)
   const padWithZeroes = number => number.toString().padStart(2, '0')
@@ -23,6 +25,8 @@
 
   function completePomodoro() {
     clearInterval(interval)
+
+    activeTask.actualPomodoros++
     completedPomodoros++
 
     if (completedPomodoros === 4) {
@@ -66,6 +70,20 @@
   }
 </script>
 
+<section>
+  <time>{formatTime(pomodoroTime)}</time>
+  <button
+    on:click={startPomodoro}
+    disabled={currentState !== State.idle || !activeTask}>
+    Start
+  </button>
+  <button
+    on:click={cancelPomodoro}
+    disabled={currentState !== State.inProgress || !activeTask}>
+    Cancel
+  </button>
+</section>
+
 <style>
   time {
     display: block;
@@ -74,15 +92,3 @@
     margin-bottom: 0.2em;
   }
 </style>
-
-<section>
-  <time>{formatTime(pomodoroTime)}</time>
-  <button on:click={startPomodoro} disabled={currentState !== State.idle}>
-    Start
-  </button>
-  <button
-    on:click={cancelPomodoro}
-    disabled={currentState !== State.inProgress}>
-    Cancel
-  </button>
-</section>

@@ -1,8 +1,8 @@
 <script>
-  export let type = 'message';
+  export let type = 'message'
 </script>
 
-<div class="{type}">
+<div class={type}>
   <slot name="title" />
   <slot />
 </div>
