@@ -66,8 +66,17 @@
   }
 </script>
 
+<style>
+  time {
+    display: block;
+    font-size: 5em;
+    font-weight: 300;
+    margin-bottom: 0.2em;
+  }
+</style>
+
 <section>
-  <p>{formatTime(pomodoroTime)}</p>
+  <time>{formatTime(pomodoroTime)}</time>
   <button on:click={startPomodoro} disabled={currentState !== State.idle}>
     Start
   </button>
