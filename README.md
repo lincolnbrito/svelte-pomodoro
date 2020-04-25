@@ -1,3 +1,8 @@
+# Pomodoro Svelte App
+
+Based on the article: https://dev.to/vintharas/discovering-svelte-3ih9
+
+
 *Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
 
 ---
