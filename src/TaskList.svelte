@@ -1,5 +1,7 @@
 <script>
-  import { afterUpdate, createEventDispatcher } from 'svelte'
+  import { afterUpdate, createEventDispatcher, tick } from 'svelte'
+  import { get } from 'svelte/store'
+  import { activeTask } from './tasksStore.js'
   import { Task } from './Task.js'
   import Message from './Message.svelte'
 
@@ -7,7 +9,6 @@
 
   let taskAddedPendingFocus = false
   let lastInput
-  let activeTask
 
   let tasks = [
     new Task('plan some fun trip with Ben and Vico'),
@@ -23,7 +24,6 @@
   function handleAddTask() {
     tasks = [...tasks, new Task()]
     taskAddedPendingFocus = true
-    console.log(tasks)
   }
 
   function handleRemoveTask(task) {
@@ -31,15 +31,13 @@
 
     tasks = [...tasks.slice(0, index), ...tasks.slice(index + 1)]
 
-    if (activeTask == task) {
+    if (get(activeTask) == task) {
       selectTask(undefined)
     }
-
-    console.log('REMOVE', task)
   }
 
   function selectTask(task) {
-    activeTask = task
+    activeTask.set(task)
 
     dispatch('taskSelected', { task: activeTask })
   }
@@ -62,7 +60,7 @@
 {:else}
   <ul>
     {#each tasks as task}
-      <li class:active={activeTask === task}>
+      <li class:active={$activeTask === task}>
         <button on:click={() => selectTask(task)}>&gt;</button>
         <input
           class="description"

@@ -1,14 +1,14 @@
 <script>
-  export let activeTask
+  import { activeTask } from './tasksStore.js'
 
   const minutesToSeconds = minutes => minutes * 60
   const secondsToMinutes = seconds => Math.floor(seconds / 60)
   const padWithZeroes = number => number.toString().padStart(2, '0')
 
   // length of a pomodoro in seconds
-  const POMODORO_S = minutesToSeconds(25)
-  const LONG_BREAK_S = minutesToSeconds(20)
-  const SHORT_BREAK_S = minutesToSeconds(5)
+  const POMODORO_S = minutesToSeconds(0.5)
+  const LONG_BREAK_S = minutesToSeconds(1)
+  const SHORT_BREAK_S = minutesToSeconds(1)
   const State = { idle: 'idle', inProgress: 'in progress', resting: 'resting' }
 
   let pomodoroTime = POMODORO_S
@@ -26,7 +26,7 @@
   function completePomodoro() {
     clearInterval(interval)
 
-    activeTask.actualPomodoros++
+    $activeTask.actualPomodoros++
     completedPomodoros++
 
     if (completedPomodoros === 4) {
@@ -35,12 +35,15 @@
     } else {
       rest(SHORT_BREAK_S)
     }
+
+    console.log($activeTask)
   }
 
   function startPomodoro() {
+    console.log($activeTask)
     currentState = State.inProgress
     interval = setInterval(() => {
-      if (pomodoroTime === 0) {
+      if (pomodoroTime == 0) {
         completePomodoro()
       }
       pomodoroTime -= 1
@@ -74,12 +77,12 @@
   <time>{formatTime(pomodoroTime)}</time>
   <button
     on:click={startPomodoro}
-    disabled={currentState !== State.idle || !activeTask}>
+    disabled={currentState !== State.idle || !$activeTask}>
     Start
   </button>
   <button
     on:click={cancelPomodoro}
-    disabled={currentState !== State.inProgress || !activeTask}>
+    disabled={currentState !== State.inProgress || !$activeTask}>
     Cancel
   </button>
 </section>
