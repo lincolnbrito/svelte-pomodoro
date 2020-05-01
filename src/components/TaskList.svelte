@@ -1,9 +1,8 @@
 <script>
   import { afterUpdate, createEventDispatcher, tick } from 'svelte'
   import { get } from 'svelte/store'
-  import { activeTask } from './tasksStore.js'
-  import { Task } from './Task.js'
-  import Message from './Message.svelte'
+  import { activeTask } from '../store.js'
+  import { Task } from '../Task.js'
 
   const dispatch = createEventDispatcher()
 

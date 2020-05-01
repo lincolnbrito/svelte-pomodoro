@@ -1,12 +1,16 @@
 <script>
-  import TaskList from './TaskList.svelte'
-  import Timer from './Timer.svelte'
+  import TaskList from './components/TaskList.svelte'
+  import Timer from './components/Timer.svelte'
   let title = 'Pomodoro Svelte'
+
+  function handleCompleted(e) {
+    console.log(e.detail);
+  }
 </script>
 
 <main>
   <h1>{title}!</h1>
-  <Timer />
+  <Timer pomodoro={0.2} longbreak={0.1} shortbreak={0.1} on:pomodoro={handleCompleted} />
   <TaskList />
 </main>
 
