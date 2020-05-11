@@ -1,7 +1,3 @@
-<svelte:head>
-  <title>{formatTime(time)}</title>
-</svelte:head>
-
 <script>
   import { createEventDispatcher  } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -17,6 +13,7 @@
   export let pomodoro = 25;
   export let longbreak = 20;
   export let shortbreak = 5;
+  export let reset = false;
 
   let POMODORO_TIME = minutesToSeconds(pomodoro)
   let LONG_BREAK_TIME = minutesToSeconds(longbreak)
@@ -24,9 +21,14 @@
 
   let time = POMODORO_TIME;
   let pomodoros = 0;
-  let completed = 0;
   let interval
   let state = STATE.IDLE
+
+  $: {
+    dispatch('tick', formatTime(time));
+    if(reset) pomodoros = 0;
+  }
+
 
   function startPomodoro() {
     state = STATE.IN_PROGRESS;
@@ -50,15 +52,18 @@
 
     pomodoros++;
     state = STATE.COMPLETED;
+    dispatch('pomodoro', { state, pomodoros });
 
-    if (pomodoros === 4) {
-      completed++;
-      dispatch('pomodoro', { state, pomodoros });
+    if (pomodoros == 4) {
       pomodoros = 0;
-      rest(LONG_BREAK_TIME)
+
+      rest(LONG_BREAK_TIME, 'resting_long')
+
     } else {
-      rest(SHORT_BREAK_TIME)
+
+      rest(SHORT_BREAK_TIME, 'resting_short')
     }
+
   }
 
   function cancelPomodoro() {
@@ -66,11 +71,11 @@
     state = STATE.CANCELED;
     time = POMODORO_TIME;
 
-    dispatch('pomodoro', { state, pomodoros, completed });
+    dispatch('pomodoro', { state, pomodoros });
   }
 
-  function rest(restTime) {
-    state = STATE.RESTING;
+  function rest(restTime, state) {
+    state = state;
     dispatch('pomodoro', { state, pomodoros });
     time = restTime;
 
@@ -96,8 +101,8 @@
 </script>
 
 <section>
-  pomodoros: {pomodoros}
-  state: {state}
+  reset: {reset} | state: {state}
+
   <time>{formatTime(time)}</time>
   <button
     on:click={startPomodoro}
@@ -110,6 +115,7 @@
     disabled={state == STATE.IDLE || state == STATE.CANCELED}>
     Cancel
   </button>
+  <slot name="details"></slot>
 </section>
 
 <style>

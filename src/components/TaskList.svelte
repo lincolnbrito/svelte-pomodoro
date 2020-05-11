@@ -1,19 +1,15 @@
 <script>
   import { afterUpdate, createEventDispatcher, tick } from 'svelte'
-  import { get } from 'svelte/store'
-  import { activeTask } from '../store.js'
   import { Task } from '../Task.js'
 
   const dispatch = createEventDispatcher()
 
-  let taskAddedPendingFocus = false
-  let lastInput
+  let taskAddedPendingFocus = false;
+  let lastInput;
+  let taskSelected;
 
-  let tasks = [
-    new Task('plan some fun trip with Ben and Vico'),
-    new Task('buy some flowers to my wife'),
-    new Task('write an article about Svelte'),
-  ]
+  export let tasks = [];
+  export let disable = false;
 
   $: allExpectedPomodoros = tasks.reduce(
     (acc, t) => acc + t.expectedPomodoros,
@@ -30,15 +26,14 @@
 
     tasks = [...tasks.slice(0, index), ...tasks.slice(index + 1)]
 
-    if (get(activeTask) == task) {
-      selectTask(undefined)
-    }
+    // if (get(activeTask) == task) {
+    //   selectTask(undefined)
+    // }
   }
 
   function selectTask(task) {
-    activeTask.set(task)
-
-    dispatch('taskSelected', { task: activeTask })
+    taskSelected = task;
+    dispatch('taskSelected', { task: taskSelected })
   }
 
   function focusNewTask() {
@@ -58,9 +53,9 @@
   </p>
 {:else}
   <ul>
-    {#each tasks as task}
-      <li class:active={$activeTask === task}>
-        <button on:click={() => selectTask(task)}>&gt;</button>
+    {#each tasks as task (task.id)}
+      <li class:active={taskSelected === task}>
+        <button on:click={() => selectTask(task)} disabled={taskSelected || disable}>&gt;</button>
         <input
           class="description"
           type="text"
@@ -69,19 +64,21 @@
         <input
           class="pomodoros"
           type="number"
-          bind:value={task.expectedPomodoros} />
+          bind:value={task.expectedPomodoros}
+          disabled={taskSelected}
+        />
         <input
           class="pomodoros small"
           bind:value={task.actualPomodoros}
           disabled />
-        <button on:click={() => handleRemoveTask(task)}>X</button>
+        <button on:click={() => handleRemoveTask(task)} disabled={taskSelected || disable}>X</button>
       </li>
     {/each}
 
   </ul>
 {/if}
 
-<button on:click={handleAddTask}>Add a new task</button>
+<button on:click={handleAddTask} disabled={taskSelected || disable}>Add a new task</button>
 
 {#if tasks.length != 0}
   <p>Today you'll complete {allExpectedPomodoros} pomodoros</p>
